@@ -28,6 +28,17 @@ class Telegram:
         url = self.full_endpoint + 'getUpdates'
         response = requests.get(url)
         return response
-
+    
+    def get_file_information(self, file_id):
+        url = f'https://api.telegram.org/bot{self.token}/getFile'
+        response = requests.post(url,data = {"file_id":file_id})
+        if response.status_code != 200:
+          return {"ok":"False"}
+        json_response = response.json()
+        if json_response['ok'] == False:
+          return {"ok":"False"}
+        file_path = json_response['result']['file_path']
+        file_information = requests.get(f'https://api.telegram.org/file/bot{self.token}/{file_path}')
+        return file_information.text
 
 
