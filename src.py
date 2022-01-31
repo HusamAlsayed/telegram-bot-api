@@ -1,6 +1,5 @@
 import requests
 
-
 class Telegram:
 
     def __init__(self, bot_token):
@@ -24,6 +23,12 @@ class Telegram:
         response = requests.post(url, data=data, files=files)
         return response
 
+    def send_document(self, chat_id, file):
+        url = self.full_endpoint + 'sendDocument'
+        data = {'chat_id': chat_id}
+        files = {'document':open(file, 'rb')}
+        response = requests.post(url, data = data, files = files)
+        return response
     def get_updates(self):
         url = self.full_endpoint + 'getUpdates'
         response = requests.get(url)
@@ -40,5 +45,3 @@ class Telegram:
         file_path = json_response['result']['file_path']
         file_information = requests.get(f'https://api.telegram.org/file/bot{self.token}/{file_path}')
         return file_information.text
-
-
